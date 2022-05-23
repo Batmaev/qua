@@ -8,7 +8,7 @@
 
 2. Обзор литературы
 
-    2.1. Квантовый алгоритм Хелда-Карпа
+    2.1. Квантовый алгоритм Хелда-Карпа (https://arxiv.org/pdf/1807.05209.pdf, https://people.maths.bris.ac.uk/~csxam/papers/tsp.pdf)
 
     2.2. QAOA (Quantum Approximate Optimization Algorithm)
 
