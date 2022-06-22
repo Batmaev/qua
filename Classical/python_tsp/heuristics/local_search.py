@@ -63,7 +63,7 @@ def solve_tsp_local_search(
             2.1 For each `x'` neighbor of `x`, if `fx'` < `fx`, set `x` <- `x'`
             and stop;
         3. Repeat step 2 until all neighbors of `x` are tried and there is no
-        improvement. Return `x`, `fx` as solution.
+        improvement. Return `x`, `fx`, `nfev` as solution.
     """
     x, fx = setup(distance_matrix, x0)
     max_processing_time = max_processing_time or np.inf
