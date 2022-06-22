@@ -21,7 +21,7 @@ def solve_tsp_simulated_annealing(
     perturbation_scheme: str = "two_opt",
     alpha: float = 0.9,
     max_processing_time: float = None,
-    log_file: Optional[str] = None,
+    # log_file: Optional[bool] = None,
 ) -> Tuple[List, float]:
     """Solve a TSP problem using a Simulated Annealing
     The approach used here is the one proposed in [1].
@@ -49,7 +49,7 @@ def solve_tsp_simulated_annealing(
         Maximum processing time in seconds. If not provided, the method stops
         only when there were 3 temperature cycles with no improvement.
 
-    log_file
+    # log_file
         If not `None`, creates a log file with details about the whole
         execution
 
@@ -60,6 +60,8 @@ def solve_tsp_simulated_annealing(
 
     The total distance the returned permutation produces.
 
+    Number of cost evaluations
+
     References
     ----------
     [1] Dréo, Johann, et al. Metaheuristics for hard optimization: methods and
@@ -69,16 +71,17 @@ def solve_tsp_simulated_annealing(
     x, fx = setup(distance_matrix, x0)
     temp = _initial_temperature(distance_matrix, x, fx, perturbation_scheme)
     max_processing_time = max_processing_time or np.inf
-    if log_file:
-        fh = logging.FileHandler(log_file)
-        fh.setLevel(logging.INFO)
-        logger.addHandler(fh)
-        logger.setLevel(logging.INFO)
+    # if log_file:
+    #     fh = logging.FileHandler(log_file)
+    #     fh.setLevel(logging.INFO)
+    #     logger.addHandler(fh)
+    #     logger.setLevel(logging.INFO)
 
     n = len(x)
     k_inner_min = n  # min inner iterations
     k_inner_max = 10 * n  # max inner iterations
     k_noimprovements = 0  # number of inner loops without improvement
+    nfev = 0 # number of cost function evaluations
 
     tic = default_timer()
     stop_early = False
@@ -98,12 +101,13 @@ def solve_tsp_simulated_annealing(
                 k_accepted += 1
                 k_noimprovements = 0
 
-            logger.info(
-                f"Temperature {temp}. Current value: {fx} "
-                f"k: {k + 1}/{k_inner_max} "
-                f"k_accepted: {k_accepted}/{k_inner_min} "
-                f"k_noimprovements: {k_noimprovements}"
-            )
+            # logger.info(
+            #     f"Temperature {temp}. Current value: {fx} "
+            #     f"k: {k + 1}/{k_inner_max} "
+            #     f"k_accepted: {k_accepted}/{k_inner_min} "
+            #     f"k_noimprovements: {k_noimprovements}"
+            # )
+            nfev += 1
 
             if k_accepted >= k_inner_min:
                 break
@@ -111,7 +115,7 @@ def solve_tsp_simulated_annealing(
         temp *= alpha  # temperature update
         k_noimprovements += k_accepted == 0
 
-    return x, fx
+    return x, fx, nfev
 
 
 def _initial_temperature(

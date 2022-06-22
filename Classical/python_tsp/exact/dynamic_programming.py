@@ -120,4 +120,4 @@ def solve_tsp_dynamic_programming(
         solution.append(ni)
         N = N.difference({ni})
 
-    return solution, best_distance
+    return solution, best_distance, dist.cache_info().currsize

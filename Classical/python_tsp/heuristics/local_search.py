@@ -21,7 +21,7 @@ def solve_tsp_local_search(
     x0: Optional[List[int]] = None,
     perturbation_scheme: str = "two_opt",
     max_processing_time: Optional[float] = None,
-    log_file: Optional[str] = None,
+    # log_file: Optional[str] = None,
 ) -> Tuple[List, float]:
     """Solve a TSP problem with a local search heuristic
 
@@ -41,7 +41,7 @@ def solve_tsp_local_search(
         Maximum processing time in seconds. If not provided, the method stops
         only when a local minimum is obtained
 
-    log_file
+    # log_file
         If not `None`, creates a log file with details about the whole
         execution
 
@@ -51,6 +51,8 @@ def solve_tsp_local_search(
     distance obtained (not necessarily optimal).
 
     The total distance the returned permutation produces.
+
+    Number of cost evaluations
 
     Notes
     -----
@@ -65,15 +67,16 @@ def solve_tsp_local_search(
     """
     x, fx = setup(distance_matrix, x0)
     max_processing_time = max_processing_time or np.inf
-    if log_file:
-        fh = logging.FileHandler(log_file)
-        fh.setLevel(logging.INFO)
-        logger.addHandler(fh)
-        logger.setLevel(logging.INFO)
+    # if log_file:
+    #     fh = logging.FileHandler(log_file)
+    #     fh.setLevel(logging.INFO)
+    #     logger.addHandler(fh)
+    #     logger.setLevel(logging.INFO)
 
     tic = default_timer()
     stop_early = False
     improvement = True
+    nfev = 0
     while improvement and (not stop_early):
         improvement = False
         for n_index, xn in enumerate(neighborhood_gen[perturbation_scheme](x)):
@@ -83,14 +86,15 @@ def solve_tsp_local_search(
                 break
 
             fn = compute_permutation_distance(distance_matrix, xn)
-            logger.info(f"Current value: {fx}; Neighbor: {n_index}")
+            # logger.info(f"Current value: {fx}; Neighbor: {n_index}")
+            nfev += 1
 
             if fn < fx:
                 improvement = True
                 x, fx = xn, fn
                 break  # early stop due to first improvement local search
 
-    return x, fx
+    return x, fx, nfev
 
 
 def setup(
