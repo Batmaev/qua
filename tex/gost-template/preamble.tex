@@ -89,10 +89,10 @@
 \titlespacing*{\subsubsection}{\parindent}{\headingsMargin}{\headingsMargin}
 
 % пункт
-\newcommand{\parag}{
-    \paragraph{}
+\newcommand{\parag}[1]{
+    \paragraph{#1}
 }
-\titleformat{\paragraph}[runin]{}{\theparagraph}{1em}{ }  % для отступа
+\titleformat{\paragraph}[runin]{\filright\bfseries}{\theparagraph}{1em}{ }  % для отступа
 \titlespacing*{\paragraph}{\parindent}{0pt}{0pt}
 
 % подпункт
